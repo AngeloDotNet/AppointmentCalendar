@@ -1,0 +1,47 @@
+﻿@page "/calendar"
+@using System.Globalization
+@using CalendarioEventi.Enums
+@using CalendarioEventi.Models
+@inject HttpClient Http
+
+<h3>@CalendarioTitle</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th><button @onclick="PreviousMonth">@PreviousMonthText</button></th>
+            <th colspan="5">@CurrentMonthText</th>
+            <th><button @onclick="NextMonth">@NextMonthText</button></th>
+        </tr>
+        <tr>
+            @foreach (var day in dayNames)
+            {
+                <th>@TranslateDay(day)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var week in weeks)
+        {
+            <tr>
+                @foreach (var day in week)
+                {
+                    <td>
+                        @if (day != null)
+                        {
+                            <div>@day?.Day</div>
+
+                            if (events.Where(e => e.StartDate.Date == day?.Date).ToList().Count > 0)
+                            {
+                                <div>@CheckOutEventDayText</div>
+                            }
+                            else{
+                                <div>@NoEventDayText</div>
+                            }
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
